@@ -101,7 +101,7 @@ export default function Navbar() {
 
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 1 }}>
             {navItems.map((item) => (
-              <Link key={item.label} href={item.path} passHref legacyBehavior>
+              <Link key={item.label} href={item.path}>
                 <Button color="inherit" startIcon={item.icon}>
                   {item.label}
                 </Button>
