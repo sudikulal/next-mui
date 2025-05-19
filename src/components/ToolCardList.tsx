@@ -5,9 +5,17 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function ToolCardList({ toolsList }: { toolsList: any[] }) {
+function ToolCardList({
+  authToken,
+  toolsList,
+}: {
+  authToken: String;
+  toolsList: any[];
+}) {
   return (
     <Box
       sx={{
@@ -24,7 +32,7 @@ function ToolCardList({ toolsList }: { toolsList: any[] }) {
           key={index}
           variant="outlined"
           sx={{
-            width: { xs: "90%", sm: 300 }, 
+            width: { xs: "90%", sm: 300 },
             display: "flex",
             flexDirection: "column",
             "&:hover": {
@@ -35,30 +43,36 @@ function ToolCardList({ toolsList }: { toolsList: any[] }) {
         >
           <Box
             component="img"
-            src={tool.tumbnail || "https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=300" }
+            src={
+              tool.tumbnail ||
+              "https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=300"
+            }
             alt={tool.name}
             loading="lazy"
             sx={{
               width: "100%",
               height: 180,
-              objectFit: "cover", 
+              objectFit: "cover",
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
             }}
           />
           <CardContent>
-            <Typography variant="h6"  gutterBottom>
+            <Typography variant="h6" gutterBottom>
               {tool.name}
             </Typography>
-            <Typography
-              variant="body2"
-              gutterBottom
-            >
+            <Typography variant="body2" gutterBottom>
               {tool.description}
             </Typography>
-              <Link href={tool.link} target="_blank" >
-                <OpenInNewIcon/>
-              </Link>
+            <Link href={tool.link} target="_blank">
+              <OpenInNewIcon />
+            </Link>
+            {Boolean(authToken) && (
+              <>
+                <EditIcon />
+                <DeleteIcon />
+              </>
+            )}
           </CardContent>
         </Card>
       ))}

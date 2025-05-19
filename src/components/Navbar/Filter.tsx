@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import {
   Menu,
   MenuItem,
@@ -24,7 +23,6 @@ const filterItems = [
 ];
 
 export default function FilterDropdown() {
-  const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedName, setSelectedName] = React.useState<string | null>(null);
 

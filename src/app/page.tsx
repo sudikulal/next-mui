@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import ToolCardList from "@/components/ToolCardList";
+import { cookies } from "next/headers";
 
 const getToolsList = () => {
   return fetch(process.env.NEXT_PUBLIC_API_URL + "/tool/list", {
@@ -16,7 +17,6 @@ const getToolsList = () => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       return data?.tools || [];
     })
     .catch((error) => {
@@ -27,9 +27,12 @@ const getToolsList = () => {
 export default async function Home() {
   const toolsList = await getToolsList();
 
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("auth_token")?.value || "";
+
   return (
     <main className={styles.main}>
-      <ToolCardList toolsList={toolsList} />
+      <ToolCardList authToken={authToken} toolsList={toolsList} />
     </main>
   );
 }
