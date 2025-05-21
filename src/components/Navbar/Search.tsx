@@ -1,61 +1,49 @@
-import { styled, alpha } from "@mui/material/styles";
-
-import SearchIcon from "@mui/icons-material/Search";
-import { InputBase } from "@mui/material";
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: theme.spacing(2),
-  marginRight: theme.spacing(2),
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    width: "50%",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  width: "100%",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-}));
-
 import React from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import SearchIcon from "@mui/icons-material/Search";
+import { InputBase, Box } from "@mui/material";
 
 export default function SearchBar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = React.useState(searchParams.get("search") || "");
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    const params = new URLSearchParams(searchParams);
+    value ? params.set("search", value) : params.delete("search");
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.15)",
+        borderRadius: 1,
+        px: 2,
+        py: 0.5,
+        width: "100%",
+        maxWidth: 500,
+        "&:hover": {
+          backgroundColor: "rgba(255, 255, 255, 0.25)",
+        },
+      }}
+    >
+      <SearchIcon sx={{ mr: 1 }} />
+      <InputBase
+        value={search}
+        onChange={handleSearchChange}
         placeholder="Search…"
+        fullWidth
         inputProps={{ "aria-label": "search" }}
+        sx={{ color: "inherit" }}
       />
-    </Search>
+    </Box>
   );
 }

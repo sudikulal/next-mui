@@ -24,8 +24,22 @@ const getToolsList = () => {
     });
 };
 
-export default async function Home() {
-  const toolsList = await getToolsList();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const search = searchParams.search?.toLowerCase() || "";
+
+  let toolsList = await getToolsList();
+
+  if (search) {
+    toolsList = toolsList.filter(
+      (tool: any) =>
+        tool.name.toLowerCase().includes(search) ||
+        tool.description.toLowerCase().includes(search)
+    );
+  }
 
   const cookieStore = await cookies();
   const authToken = cookieStore.get("auth_token")?.value || "";
