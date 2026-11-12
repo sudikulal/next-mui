@@ -8,6 +8,8 @@ import Link from "next/link";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Button } from "@mui/material";
+import { Co2Sharp } from "@mui/icons-material";
 
 function ToolCardList({
   authToken,
@@ -16,6 +18,36 @@ function ToolCardList({
   authToken: String;
   toolsList: any[];
 }) {
+  const handleClick = (id: String) => {
+    if (confirm("Are you sure you want to delete this tool?")) {
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/tool/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          cookies: `auth_token=${authToken}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          alert(data.message);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+    toolsList.splice(
+      toolsList.findIndex((tool) => tool._id === id),
+      1
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -70,7 +102,10 @@ function ToolCardList({
             {Boolean(authToken) && (
               <>
                 <EditIcon />
-                <DeleteIcon />
+                <Button
+                  startIcon={<DeleteIcon />}
+                  onClick={() => handleClick(tool._id)}
+                />
               </>
             )}
           </CardContent>

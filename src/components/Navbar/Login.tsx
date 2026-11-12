@@ -9,8 +9,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import LoginIcon from "@mui/icons-material/Login";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Box, Button } from "@mui/material";
+
+
+import AddTool from "../AddTool";
 
 export default function Login() {
   const router = useRouter();
@@ -47,6 +49,7 @@ export default function Login() {
         .then((data) => {
           Cookies.set("auth_token", data?.access_token || "", { path: "/" });
           setAuthToken(data?.access_token);
+          router.refresh();
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -60,9 +63,7 @@ export default function Login() {
   return (
     <Box>
       {authToken ? (
-        <Button color="inherit" startIcon={<AddBoxIcon />}>
-          Add
-        </Button>
+        <AddTool authToken = {authToken}/>
       ) : (
         <Button
           color="inherit"

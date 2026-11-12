@@ -11,7 +11,7 @@ export default function Navbar() {
   
   return (
     <>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box display="flex" alignItems="center">
             <AutoFixHighIcon sx={{ mr: 1 }} />

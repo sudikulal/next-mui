@@ -29,7 +29,7 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string };
 }) {
-  const search = searchParams.search?.toLowerCase() || "";
+  const search = (await searchParams).search?.toLowerCase() || "";
 
   let toolsList = await getToolsList();
 
